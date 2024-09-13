@@ -105,30 +105,43 @@ name2id <- AlgaeBase_name2id(c("Chaetoceros distans var. subsecundus"), api_key 
 
 ## Taxonomic Metadata
 
-Here is a breakdown of the most important metadata fields retrieved from the API:
+Here is a breakdown of the metadata fields retrieved from the API:
+Here’s an extended table with descriptions for each column name based on the image you provided, formatted for your README file:
 
-| Key                      | Metadata Definition                                                                                     | Level    |
-|--------------------------|---------------------------------------------------------------------------------------------------------|----------|
-| `creator`                | An entity primarily responsible for making the resource.                                                | Both     |
-| `modified`               | Date on which the resource was changed.                                                                 | Both     |
-| `namePublishedInYear`     | The four-digit year in which the scientific name was published.                                         | Both     |
-| `taxonRank`              | The taxonomic rank of the most specific name in the scientific name.                                     | Both     |
-| `taxonomicStatus`         | The status of the use of the scientific name as a label for a taxon.                                    | Both     |
-| `nomenclaturalStatus`     | The status related to the original publication of the name and its conformance to the relevant rules.    | Both     |
-| `scientificNameAuthorship`| The authorship information for the scientific name.                                                     | Both     |
-| `scientificName`          | The taxon name (with date and authorship information if applicable).                                    | Both     |
-| `genus`                  | The full scientific name of the genus in which the taxon is classified.                                  | Both     |
-| `isFossil`               | Indicates whether the taxon is a fossil.                                                                | Species  |
-| `isFreshwater`           | A boolean flag indicating whether the taxon occurs in freshwater habitats.                              | Species  |
-| `isMarine`               | A boolean flag indicating whether the taxon occurs in marine habitats.                                  | Species  |
-| `isTerrestrial`          | A boolean flag indicating whether the taxon occurs on land.                                              | Species  |
-| `isBrackish`             | A boolean flag indicating whether the taxon occurs in brackish water.                                   | Species  |
-| `specificEpithet`        | The name of the species epithet of the scientific name.                                                  | Species  |
-| `scientificNameID`       | A unique identifier for the scientific name.                                                            | Both     |
-| `kingdom`    | Full scientific name of the kingdom in which the taxon is classified.                       | Both     |
-| `phylum`    | Full scientific name of the phylum or division in which the taxon is classified                       | Both     |
-| `class`    | Full scientific name of the class in which the taxon is classified                       | Both     |
-| `family`    | Full scientific name of the order in which the taxon is classified                       | Both     |
-| `order`    | Full scientific name of the family in which the taxon is classified                       | Both     |
-| `genus`    | Full scientific name of the genus in which the taxon is classified                       | Both     |
+| Column Name                   | Genus | Species | ID   | Name | Description                                                                                          |
+|-------------------------------|-------|---------|------|------|------------------------------------------------------------------------------------------------------|
+| **URI**                        | Yes   | Yes     | Yes  | Yes  | The identifier for the resource, constructed as a Uniform Resource Identifier (URI).                 |
+| **bibliographicCitation**      | Yes   | Yes     | Yes  | Yes  | A bibliographic reference to the resource or scientific name.                                        |
+| **creator**                    | Yes   | Yes     | Yes  | Yes  | The entity primarily responsible for creating the taxonomic resource (e.g., the researcher).         |
+| **modified**                   | Yes   | Yes     | Yes  | Yes  | The date when the resource was last modified.                                                        |
+| **acceptedNameUsage**          | Yes   | Yes     | No   | Yes  | The currently accepted name for the taxon, according to the taxonomic hierarchy.                     |
+| **acceptedNameUsageID**        | Yes   | Yes     | Yes  | Yes  | The unique identifier for the accepted name usage.                                                   |
+| **genus**                      | Yes   | Yes     | Yes  | Yes  | The full scientific name of the genus in which the taxon is classified.                              |
+| **class**                      | Yes   | Yes     | Yes  | Yes  | The taxonomic class in which the taxon is classified.                                                |
+| **family**                     | Yes   | Yes     | Yes  | Yes  | The taxonomic family in which the taxon is classified.                                               |
+| **kingdom**                    | Yes   | Yes     | Yes  | Yes  | The taxonomic kingdom in which the taxon is classified (e.g., Plantae, Animalia).                    |
+| **namePublishedInYear**        | Yes   | Yes     | Yes  | Yes  | The year when the taxon name was first published.                                                    |
+| **nomenclaturalStatus**        | Yes   | Yes     | No   | No   | The status related to the original publication of the taxon name under nomenclatural rules.           |
+| **order**                      | Yes   | Yes     | Yes  | No   | The taxonomic order in which the taxon is classified.                                                |
+| **phylum**                     | Yes   | Yes     | Yes  | No   | The taxonomic phylum in which the taxon is classified.                                               |
+| **scientificName**             | Yes   | Yes     | Yes  | Yes  | The full scientific name of the taxon, including authorship information.                             |
+| **scientificNameAuthorship**   | Yes   | Yes     | Yes  | No   | The authorship of the scientific name following the conventions of the nomenclatural code.            |
+| **scientificNameID**           | Yes   | Yes     | Yes  | Yes  | A unique identifier for the scientific name as used in the nomenclature.                             |
+| **taxonRank**                  | Yes   | Yes     | Yes  | No   | The taxonomic rank (e.g., species, genus) of the most specific name in the scientific name.           |
+| **taxonomicStatus**            | Yes   | Yes     | Yes  | Yes  | The status of the taxon name (e.g., accepted or synonym) as a label for a taxon.                     |
+| **typeStatus**                 | Yes   | No      | No   | No   | The type specimen status of the taxon (if available).                                                |
+| **acceptedTypeSpeciesId**      | Yes   | No      | No   | No   | The ID of the accepted type species for the genus.                                                   |
+| **acceptedTypeSpeciesName**    | Yes   | No      | No   | No   | The name of the accepted type species for the genus.                                                 |
+| **isFossil**                   | No    | Yes     | No   | No   | Indicates whether the taxon is fossil or not (boolean flag).                                         |
+| **isFreshwater**               | No    | Yes     | No   | No   | Indicates whether the taxon occurs in freshwater habitats (boolean flag).                            |
+| **isMarine**                   | No    | Yes     | Yes  | No   | Indicates whether the taxon occurs in marine habitats (boolean flag).                                |
+| **isTerrestrial**              | No    | Yes     | No   | No   | Indicates whether the taxon occurs in terrestrial habitats (boolean flag).                           |
+| **isBrackish**                 | No    | Yes     | No   | No   | Indicates whether the taxon occurs in brackish habitats (boolean flag).                              |
+| **originalNameUsage**          | No    | Yes     | Yes  | No   | The original name usage when the taxon was first described or established.                           |
+| **originalNameUsageID**        | No    | Yes     | Yes  | No   | A unique identifier for the original name usage.                                                     |
+| **parentNameUsageID**          | No    | Yes     | Yes  | No   | The taxon ID of the direct parent taxon in a classification hierarchy.                               |
+| **specificEpithet**            | No    | Yes     | Yes  | No   | The species epithet in the scientific name.                                                          |
+| **infraspecificEpithet_forma** | No    | Yes     | No   | No   | The infraspecific epithet at the rank "forma" in the scientific name.                                |
+| **infraspecificEpithet_subspecies** | No    | Yes  | No   | No   | The infraspecific epithet at the rank "subspecies" in the scientific name.                           |
+| **infraspecificEpithet_variety** | No    | Yes  | No   | No   | The infraspecific epithet at the rank "variety" in the scientific name.                              |
 
