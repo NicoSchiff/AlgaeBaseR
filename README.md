@@ -1,7 +1,3 @@
-Here is a **README** for your repository, explaining the purpose of each function and providing usage instructions:
-
----
-
 # AlgaeBaseR: A Tool for Querying Taxonomic Data from the AlgaeBase API
 
 **AlgaeBaseR** is a collection of functions designed to query the AlgaeBase API to retrieve detailed taxonomic information for various algae species and genera. This tool allows users to automate the process of fetching taxonomic details, which can be used in research, biodiversity analysis, and ecological studies.
