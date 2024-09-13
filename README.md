@@ -125,7 +125,10 @@ Here is a breakdown of the most important metadata fields retrieved from the API
 | `isBrackish`             | A boolean flag indicating whether the taxon occurs in brackish water.                                   | Species  |
 | `specificEpithet`        | The name of the species epithet of the scientific name.                                                  | Species  |
 | `scientificNameID`       | A unique identifier for the scientific name.                                                            | Both     |
-| `acceptedNameUsageID`    | The taxon ID of the taxon considered to be the accepted name for this name usage.                       | Both     |
-
-
+| `kingdom`    | Full scientific name of the kingdom in which the taxon is classified.                       | Both     |
+| `phylum`    | Full scientific name of the phylum or division in which the taxon is classified                       | Both     |
+| `class`    | Full scientific name of the class in which the taxon is classified                       | Both     |
+| `family`    | Full scientific name of the order in which the taxon is classified                       | Both     |
+| `order`    | Full scientific name of the family in which the taxon is classified                       | Both     |
+| `genus`    | Full scientific name of the genus in which the taxon is classified                       | Both     |
 
