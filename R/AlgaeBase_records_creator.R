@@ -14,7 +14,7 @@
 #' result_creator <- AlgaeBase_records_creator("M.D. Guiry", api_key = "your_api_key")
 #' print(result_creator)
 #' @export
-AlgaeBase_records_creator <- function(creator, api_key = Sys.getenv("ALGAEBASE_API_KEY"), offset = 0, count = 5000) {
+AlgaeBase_records_creator <- function(creator, api_key = Sys.getenv("ALGAEBASE_API_KEY"), offset = 0, count = 12500) {
   
   # Load necessary libraries for API requests and data manipulation
   library(httr)      # For HTTP requests
@@ -64,7 +64,9 @@ AlgaeBase_records_creator <- function(creator, api_key = Sys.getenv("ALGAEBASE_A
   
   # Apply the fetch function to the creator parameter. 
   # This allows multiple creators to be processed, if needed, using map_dfr for row binding.
-  result_df <- map_dfr(creator, fetch_creator_data)
+  result_df <- map_dfr(creator, fetch_creator_data) %>% 
+    rename_with(~ str_replace_all(.x, "dwc:", ""), starts_with("dwc:")) %>%  # Rename columns for clarity
+    rename_with(~ str_replace_all(.x, "dcterms:", ""), starts_with("dcterms:"))
   
   # Return the final tibble containing the fetched species records
   return(result_df)
