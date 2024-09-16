@@ -73,10 +73,11 @@ Retrieves taxonomic information for a list of species. If available, it also ret
 **Parameters**:
 - `scientific_names`: A vector of scientific species names.
 - `api_key`: The API key for accessing AlgaeBase (optional, fetched from environment if not provided).
+- `update_taxo`: A logical value. If TRUE, genus-level taxonomy will be fetched and included (default is TRUE).
 
 **Example**:
 ```r
-species <- AlgaeBase_records_species(c("Phaeocystis pouchetii", "Amphidinium klebsii"), api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+species <- AlgaeBase_records_species(c("Phaeocystis pouchetii", "Chaetoceros socialis"), api_key = Sys.getenv("ALGAEBASE_API_KEY"), update_taxo = TRUE)
 ```
 
 ### 3. `AlgaeBase_records_IDs()`
