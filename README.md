@@ -41,7 +41,7 @@ genus <- AlgaeBase_records_genus(c("Phaeocystis", "Alexandrium", "Chaetoceros"),
 print(genus)
 
 # Retrieve species information
-species <- AlgaeBase_records_species(c("Phaeocystis pouchetii", "Amphidinium klebsii"), api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+species <- AlgaeBase_records_species(c("Phaeocystis pouchetii", "Chaetoceros socialis"), api_key = Sys.getenv("ALGAEBASE_API_KEY"), update_taxo = TRUE)
 print(species)
 
 # Retrieve species by AlgaeBase ID
