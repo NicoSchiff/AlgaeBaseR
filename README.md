@@ -109,19 +109,19 @@ name2id <- AlgaeBase_name2id(c("Chaetoceros distans var. subsecundus"), api_key 
 Here is a breakdown of the metadata fields retrieved from the API:
 Here’s an extended table with descriptions for each column name based on the image you provided, formatted for your README file:
 
-| Column Name                   | Genus | Species | ID   | Name | Description                                                                                          |
+| Column Name                   | AlgaeBase_records_genus | AlgaeBase_records_species | scientific_species_IDs   | AlgaeBase_name2id | Description                                                                                          |
 |-------------------------------|-------|---------|------|------|------------------------------------------------------------------------------------------------------|
-| **URI**                        | Yes   | Yes     | Yes  | Yes  | The identifier for the resource, constructed as a Uniform Resource Identifier (URI).                 |
-| **bibliographicCitation**      | Yes   | Yes     | Yes  | Yes  | A bibliographic reference to the resource or scientific name.                                        |
-| **creator**                    | Yes   | Yes     | Yes  | Yes  | The entity primarily responsible for creating the taxonomic resource (e.g., the researcher).         |
-| **modified**                   | Yes   | Yes     | Yes  | Yes  | The date when the resource was last modified.                                                        |
+| **URI**                        | Yes   | Yes     | Yes  | NO  | The identifier for the resource, constructed as a Uniform Resource Identifier (URI).                 |
+| **bibliographicCitation**      | Yes   | Yes     | Yes  | No  | A bibliographic reference to the resource or scientific name.                                        |
+| **creator**                    | Yes   | Yes     | Yes  | No  | The entity primarily responsible for creating the taxonomic resource (e.g., the researcher).         |
+| **modified**                   | Yes   | Yes     | Yes  | No  | The date when the resource was last modified.                                                        |
 | **acceptedNameUsage**          | Yes   | Yes     | No   | Yes  | The currently accepted name for the taxon, according to the taxonomic hierarchy.                     |
 | **acceptedNameUsageID**        | Yes   | Yes     | Yes  | Yes  | The unique identifier for the accepted name usage.                                                   |
-| **genus**                      | Yes   | Yes     | Yes  | Yes  | The full scientific name of the genus in which the taxon is classified.                              |
-| **class**                      | Yes   | Yes     | Yes  | Yes  | The taxonomic class in which the taxon is classified.                                                |
-| **family**                     | Yes   | Yes     | Yes  | Yes  | The taxonomic family in which the taxon is classified.                                               |
-| **kingdom**                    | Yes   | Yes     | Yes  | Yes  | The taxonomic kingdom in which the taxon is classified (e.g., Plantae, Animalia).                    |
-| **namePublishedInYear**        | Yes   | Yes     | Yes  | Yes  | The year when the taxon name was first published.                                                    |
+| **genus**                      | Yes   | Yes     | Yes  | No  | The full scientific name of the genus in which the taxon is classified.                              |
+| **class**                      | Yes   | Yes     | Yes  | No  | The taxonomic class in which the taxon is classified.                                                |
+| **family**                     | Yes   | Yes     | Yes  | No  | The taxonomic family in which the taxon is classified.                                               |
+| **kingdom**                    | Yes   | Yes     | Yes  | No  | The taxonomic kingdom in which the taxon is classified (e.g., Plantae, Animalia).                    |
+| **namePublishedInYear**        | Yes   | Yes     | Yes  | No  | The year when the taxon name was first published.                                                    |
 | **nomenclaturalStatus**        | Yes   | Yes     | No   | No   | The status related to the original publication of the taxon name under nomenclatural rules.           |
 | **order**                      | Yes   | Yes     | Yes  | No   | The taxonomic order in which the taxon is classified.                                                |
 | **phylum**                     | Yes   | Yes     | Yes  | No   | The taxonomic phylum in which the taxon is classified.                                               |
@@ -129,7 +129,7 @@ Here’s an extended table with descriptions for each column name based on the i
 | **scientificNameAuthorship**   | Yes   | Yes     | Yes  | No   | The authorship of the scientific name following the conventions of the nomenclatural code.            |
 | **scientificNameID**           | Yes   | Yes     | Yes  | Yes  | A unique identifier for the scientific name as used in the nomenclature.                             |
 | **taxonRank**                  | Yes   | Yes     | Yes  | No   | The taxonomic rank (e.g., species, genus) of the most specific name in the scientific name.           |
-| **taxonomicStatus**            | Yes   | Yes     | Yes  | Yes  | The status of the taxon name (e.g., accepted or synonym) as a label for a taxon.                     |
+| **taxonomicStatus**            | Yes   | Yes     | Yes  | NO  | The status of the taxon name (e.g., accepted or synonym) as a label for a taxon.                     |
 | **typeStatus**                 | Yes   | No      | No   | No   | The type specimen status of the taxon (if available).                                                |
 | **acceptedTypeSpeciesId**      | Yes   | No      | No   | No   | The ID of the accepted type species for the genus.                                                   |
 | **acceptedTypeSpeciesName**    | Yes   | No      | No   | No   | The name of the accepted type species for the genus.                                                 |
