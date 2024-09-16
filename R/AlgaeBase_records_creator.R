@@ -14,7 +14,7 @@
 #' result_creator <- AlgaeBase_records_creator("M.D. Guiry", api_key = "your_api_key")
 #' print(result_creator)
 #' @export
-AlgaeBase_records_creator <- function(creator, api_key = Sys.getenv("ALGAEBASE_API_KEY"), offset = 0, count = 12500) {
+AlgaeBase_records_creator <- function(creator, api_key = Sys.getenv("ALGAEBASE_API_KEY"), offset = 0, count = 14000) {
   
   # Load necessary libraries for API requests and data manipulation
   library(httr)      # For HTTP requests
