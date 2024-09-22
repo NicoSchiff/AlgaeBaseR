@@ -1,148 +1,241 @@
-# AlgaeBaseR: A Tool for Querying Taxonomic Data from the AlgaeBase API
+# AlgaeBaseR - A Toolset for Querying AlgaeBase, Correcting Scientific Names, and Accessing External Datasets
 
-**AlgaeBaseR** is a collection of functions designed to query the AlgaeBase API to retrieve detailed taxonomic information for various algae species and genera. This tool allows users to automate the process of fetching taxonomic details, which can be used in research, biodiversity analysis, and ecological studies.
+This repository contains a suite of functions designed to query AlgaeBase, clean and correct scientific names from multiple sources (Dyntaxa, Nordic Microalgae, and WoRMS), and work with datasets related to harmful algae blooms (HABs) and phytoplankton species. 
+
+The goal is to streamline data retrieval and scientific name correction for algae and phytoplankton research.
 
 ## Features
 
-- **Automatic Detection**: Automatically determines whether the input is a genus or species based on the structure of the scientific name.
-- **Detailed Taxonomic Information**: Retrieves key taxonomic fields such as `scientificNameID`, `acceptedNameUsageID`, and more.
-- **String Matching**: Compares scientific names using Levenshtein distance to ensure accuracy in results.
-- **Error Handling**: Catches errors and provides clear messages if the species or genus is not found.
-- **Easy Integration**: The functions can be easily integrated into any R-based workflow.
+- **Retrieve genus and species records from AlgaeBase API** using functions such as `AlgaeBase_records_genus`, `AlgaeBase_records_species`, and more.
+- **Correct scientific names** using a combination of Dyntaxa, Nordic Microalgae, and WoRMS datasets via `correct_scientific_names`.
+- **Download taxonomic datasets** such as Dyntaxa, Nordic Microalgae, and Harmful Algal Blooms (HABs).
 
 ## Installation
 
-You can install the package by downloading it and sourcing the R scripts into your project:
+Clone the repository to your local machine and install any required dependencies:
 
-```r
-# Install required packages if you haven't already
-install.packages(c("httr", "jsonlite", "dplyr", "purrr", "tibble", "tidyr", "stringdist"))
-
-# Source the functions
-source("AlgaeBaseR_functions.R")
+```bash
+git clone https://github.com/NicoSchiff/AlgaeBaseR.git
 ```
 
-## API Key Setup
-
-You need an API key to use the AlgaeBase API. You can obtain one from [AlgaeBase](https://www.algaebase.org/). Once you have it, you can set it as an environment variable or pass it directly to the functions.
+Ensure that you have the required R packages installed:
 
 ```r
-# Set your API key
-Sys.setenv(ALGAEBASE_API_KEY = "your_api_key")
-```
-
-## Example Usage
-
-Once you've set up the API key, you can start using the functions:
-
-```r
-# Retrieve genus information
-genus <- AlgaeBase_records_genus(c("Phaeocystis", "Alexandrium", "Chaetoceros"), api_key = Sys.getenv("ALGAEBASE_API_KEY"))
-print(genus)
-
-# Retrieve species information
-species <- AlgaeBase_records_species(c("Phaeocystis pouchetii", "Chaetoceros socialis"), api_key = Sys.getenv("ALGAEBASE_API_KEY"), update_taxo = TRUE)
-print(species)
-
-# Retrieve species by AlgaeBase ID
-ID <- AlgaeBase_records_IDs(c("52921", "52068"), api_key = Sys.getenv("ALGAEBASE_API_KEY"))
-print(ID)
-
-# Retrieve scientific name IDs
-name2id <- AlgaeBase_name2id(c("Chaetoceros distans var. subsecundus"), api_key = Sys.getenv("ALGAEBASE_API_KEY"))
-print(name2id)
+install.packages(c("httr", "jsonlite", "dplyr", "stringdist", "purrr", "tibble", "tidyr"))
 ```
 
 ## Functions
 
-### 1. `AlgaeBase_records_genus()`
-Retrieves taxonomic information for a list of genera.
+### 1. `AlgaeBase_name2id`
 
-**Parameters**:
-- `scientific_genus`: A vector of scientific genus names.
-- `api_key`: The API key for accessing AlgaeBase (optional, fetched from environment if not provided).
+**Description**: Retrieves `scientificNameID` and `acceptedNameUsageID` from AlgaeBase using their API.
 
-**Example**:
+**Usage**:
+
 ```r
-genus <- AlgaeBase_records_genus(c("Phaeocystis", "Alexandrium"), api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+AlgaeBase_name2id(scientific_names, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
 ```
 
-### 2. `AlgaeBase_records_species()`
-Retrieves taxonomic information for a list of species. If available, it also retrieves the genus-level taxonomy.
-
 **Parameters**:
-- `scientific_names`: A vector of scientific species names.
-- `api_key`: The API key for accessing AlgaeBase (optional, fetched from environment if not provided).
-- `update_taxo`: A logical value. If TRUE, genus-level taxonomy will be fetched and included (default is TRUE).
+- `scientific_names`: A vector of scientific names to query.
+- `api_key`: Your AlgaeBase API key (defaults to the environment variable `ALGAEBASE_API_KEY`).
 
 **Example**:
+
 ```r
-species <- AlgaeBase_records_species(c("Phaeocystis pouchetii", "Chaetoceros socialis"), api_key = Sys.getenv("ALGAEBASE_API_KEY"), update_taxo = TRUE)
+result <- AlgaeBase_name2id(c("Phaeocystis pouchetii", "Alexandrium"))
+print(result)
 ```
 
-### 3. `AlgaeBase_records_IDs()`
-Retrieves detailed taxonomic information for species based on their AlgaeBase IDs.
+### 2. `AlgaeBase_records_genus`
+
+**Description**: Retrieves genus records from AlgaeBase using the genus name.
+
+**Usage**:
+
+```r
+AlgaeBase_records_genus(genus_name, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+```
 
 **Parameters**:
-- `scientific_species_IDs`: A vector of species IDs from AlgaeBase.
-- `api_key`: The API key for accessing AlgaeBase (optional, fetched from environment if not provided).
+- `genus_name`: The genus name to query.
+- `api_key`: Your AlgaeBase API key.
 
 **Example**:
+
 ```r
-ID <- AlgaeBase_records_IDs(c("52921", "52068"), api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+genus_records <- AlgaeBase_records_genus("Chaetoceros")
+print(genus_records)
 ```
 
-### 4. `AlgaeBase_name2id()`
-This function takes a list of scientific names (genus or species) and queries the AlgaeBase API to retrieve the corresponding `scientificNameID` and `acceptedNameUsageID`.
+### 3. `AlgaeBase_records_species`
+
+**Description**: Retrieves species records from AlgaeBase based on a given species name.
+
+**Usage**:
+
+```r
+AlgaeBase_records_species(species_name, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+```
 
 **Parameters**:
-- `scientific_names`: A vector of scientific names (genus or species).
-- `api_key`: The API key for accessing AlgaeBase (optional, fetched from environment if not provided).
+- `species_name`: The species name to query.
+- `api_key`: Your AlgaeBase API key.
 
 **Example**:
+
 ```r
-name2id <- AlgaeBase_name2id(c("Chaetoceros distans var. subsecundus"), api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+species_records <- AlgaeBase_records_species("Phaeocystis globosa")
+print(species_records)
 ```
 
-## Taxonomic Metadata
+### 4. `AlgaeBase_records_IDs`
 
-Here is a breakdown of the metadata fields retrieved from the API:
-Here’s an extended table with descriptions for each column name based on the image you provided, formatted for your README file:
+**Description**: Retrieves detailed records from AlgaeBase using specific `scientificNameID` or `acceptedNameUsageID`.
 
-| Column Name                   | AlgaeBase_records_genus | AlgaeBase_records_species | scientific_species_IDs   | AlgaeBase_name2id | Description                                                                                          |
-|-------------------------------|-------|---------|------|------|------------------------------------------------------------------------------------------------------|
-| **URI**                        | Yes   | Yes     | Yes  | NO  | The identifier for the resource, constructed as a Uniform Resource Identifier (URI).                 |
-| **bibliographicCitation**      | Yes   | Yes     | Yes  | No  | A bibliographic reference to the resource or scientific name.                                        |
-| **creator**                    | Yes   | Yes     | Yes  | No  | The entity primarily responsible for creating the taxonomic resource (e.g., the researcher).         |
-| **modified**                   | Yes   | Yes     | Yes  | No  | The date when the resource was last modified.                                                        |
-| **acceptedNameUsage**          | Yes   | Yes     | No   | Yes  | The currently accepted name for the taxon, according to the taxonomic hierarchy.                     |
-| **acceptedNameUsageID**        | Yes   | Yes     | Yes  | Yes  | The unique identifier for the accepted name usage.                                                   |
-| **genus**                      | Yes   | Yes     | Yes  | No  | The full scientific name of the genus in which the taxon is classified.                              |
-| **class**                      | Yes   | Yes     | Yes  | No  | The taxonomic class in which the taxon is classified.                                                |
-| **family**                     | Yes   | Yes     | Yes  | No  | The taxonomic family in which the taxon is classified.                                               |
-| **kingdom**                    | Yes   | Yes     | Yes  | No  | The taxonomic kingdom in which the taxon is classified (e.g., Plantae, Animalia).                    |
-| **namePublishedInYear**        | Yes   | Yes     | Yes  | No  | The year when the taxon name was first published.                                                    |
-| **nomenclaturalStatus**        | Yes   | Yes     | No   | No   | The status related to the original publication of the taxon name under nomenclatural rules.           |
-| **order**                      | Yes   | Yes     | Yes  | No   | The taxonomic order in which the taxon is classified.                                                |
-| **phylum**                     | Yes   | Yes     | Yes  | No   | The taxonomic phylum in which the taxon is classified.                                               |
-| **scientificName**             | Yes   | Yes     | Yes  | Yes  | The full scientific name of the taxon, including authorship information.                             |
-| **scientificNameAuthorship**   | Yes   | Yes     | Yes  | No   | The authorship of the scientific name following the conventions of the nomenclatural code.            |
-| **scientificNameID**           | Yes   | Yes     | Yes  | Yes  | A unique identifier for the scientific name as used in the nomenclature.                             |
-| **taxonRank**                  | Yes   | Yes     | Yes  | No   | The taxonomic rank (e.g., species, genus) of the most specific name in the scientific name.           |
-| **taxonomicStatus**            | Yes   | Yes     | Yes  | NO  | The status of the taxon name (e.g., accepted or synonym) as a label for a taxon.                     |
-| **typeStatus**                 | Yes   | No      | No   | No   | The type specimen status of the taxon (if available).                                                |
-| **acceptedTypeSpeciesId**      | Yes   | No      | No   | No   | The ID of the accepted type species for the genus.                                                   |
-| **acceptedTypeSpeciesName**    | Yes   | No      | No   | No   | The name of the accepted type species for the genus.                                                 |
-| **isFossil**                   | No    | Yes     | No   | No   | Indicates whether the taxon is fossil or not (boolean flag).                                         |
-| **isFreshwater**               | No    | Yes     | No   | No   | Indicates whether the taxon occurs in freshwater habitats (boolean flag).                            |
-| **isMarine**                   | No    | Yes     | Yes  | No   | Indicates whether the taxon occurs in marine habitats (boolean flag).                                |
-| **isTerrestrial**              | No    | Yes     | No   | No   | Indicates whether the taxon occurs in terrestrial habitats (boolean flag).                           |
-| **isBrackish**                 | No    | Yes     | No   | No   | Indicates whether the taxon occurs in brackish habitats (boolean flag).                              |
-| **originalNameUsage**          | No    | Yes     | Yes  | No   | The original name usage when the taxon was first described or established.                           |
-| **originalNameUsageID**        | No    | Yes     | Yes  | No   | A unique identifier for the original name usage.                                                     |
-| **parentNameUsageID**          | No    | Yes     | Yes  | No   | The taxon ID of the direct parent taxon in a classification hierarchy.                               |
-| **specificEpithet**            | No    | Yes     | Yes  | No   | The species epithet in the scientific name.                                                          |
-| **infraspecificEpithet_forma** | No    | Yes     | No   | No   | The infraspecific epithet at the rank "forma" in the scientific name.                                |
-| **infraspecificEpithet_subspecies** | No    | Yes  | No   | No   | The infraspecific epithet at the rank "subspecies" in the scientific name.                           |
-| **infraspecificEpithet_variety** | No    | Yes  | No   | No   | The infraspecific epithet at the rank "variety" in the scientific name.                              |
+**Usage**:
 
+```r
+AlgaeBase_records_IDs(ids, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+```
+
+**Parameters**:
+- `ids`: A vector of AlgaeBase scientific name IDs or accepted name usage IDs.
+- `api_key`: Your AlgaeBase API key.
+
+**Example**:
+
+```r
+records <- AlgaeBase_records_IDs(c(12345, 67890))
+print(records)
+```
+
+### 5. `AlgaeBase_records_creator`
+
+**Description**: Queries AlgaeBase for records based on a creator or authority name.
+
+**Usage**:
+
+```r
+AlgaeBase_records_creator(creator_name, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+```
+
+**Parameters**:
+- `creator_name`: The creator or authority name to query.
+- `api_key`: Your AlgaeBase API key.
+
+**Example**:
+
+```r
+creator_records <- AlgaeBase_records_creator("Salvador")
+print(creator_records)
+```
+
+### 6. `correct_scientific_names`
+
+**Description**: Corrects scientific names using the Dyntaxa, Nordic Microalgae, and WoRMS datasets. It compares names using a string distance threshold.
+
+**Usage**:
+
+```r
+correct_scientific_names(names, threshold = 4.5)
+```
+
+**Parameters**:
+- `names`: A vector of scientific names to correct.
+- `threshold`: The string distance threshold for matching names (default is 4.5).
+
+**Example**:
+
+```r
+names <- c("Thalassiothrix nitzschioides", "Apediniella spinifera", "Azadiium concinnum")
+corrected_names <- correct_scientific_names(names)
+print(corrected_names)
+```
+
+### 7. `download_dyntaxa_biota`
+
+**Description**: Downloads the Dyntaxa dataset directly from GitHub and loads it into an R dataframe.
+
+**Usage**:
+
+```r
+dyntaxa_biota_df <- download_dyntaxa_biota(write = FALSE)
+```
+
+**Parameters**:
+- `save_dir`: Directory where the file will be saved if `write = TRUE`.
+- `write`: Logical, indicating whether to save the dataset to disk (default is `FALSE`).
+
+**Example**:
+
+```r
+dyntaxa_biota_df <- download_dyntaxa_biota()
+head(dyntaxa_biota_df)
+```
+
+### 8. `download_nordic_microalgae`
+
+**Description**: Downloads the Nordic Microalgae checklist and loads it into an R dataframe.
+
+**Usage**:
+
+```r
+nordic_microalgae_df <- download_nordic_microalgae(write = FALSE)
+```
+
+**Parameters**:
+- `save_dir`: Directory where the file will be saved if `write = TRUE`.
+- `write`: Logical, indicating whether to save the dataset to disk (default is `FALSE`).
+
+**Example**:
+
+```r
+nordic_microalgae_df <- download_nordic_microalgae()
+head(nordic_microalgae_df)
+```
+
+### 9. `download_habs_taxlist`
+
+**Description**: Downloads the Harmful Algal Blooms (HABs) taxonomic list and loads it into an R dataframe.
+
+**Usage**:
+
+```r
+habs_taxlist_df <- download_habs_taxlist(write = FALSE)
+```
+
+**Parameters**:
+- `save_dir`: Directory where the file will be saved if `write = TRUE`.
+- `write`: Logical, indicating whether to save the dataset to disk (default is `FALSE`).
+
+**Example**:
+
+```r
+habs_taxlist_df <- download_habs_taxlist()
+head(habs_taxlist_df)
+```
+
+---
+
+## Dependencies
+
+This project relies on the following R libraries:
+- `httr`
+- `jsonlite`
+- `dplyr`
+- `purrr`
+- `tibble`
+- `tidyr`
+- `stringdist`
+- `worrms` (for accessing WoRMS API)
+
+You can install them using:
+
+```r
+install.packages(c("httr", "jsonlite", "dplyr", "purrr", "tibble", "tidyr", "stringdist", "worrms"))
+```
+
+## Usage
+
+To use the various functions, ensure you have the correct API keys (for AlgaeBase and WoRMS) set in your environment or pass them directly as arguments. Example workflows are provided in the function examples.
