@@ -14,7 +14,7 @@
 #' result_creator <- AlgaeBase_records_creator("M.D. Guiry", api_key = "your_api_key")
 #' print(result_creator)
 #' @export
-AlgaeBase_records_creator <- function(creator, api_key = Sys.getenv("ALGAEBASE_API_KEY"), offset = 0, count = 14000) {
+AlgaeBase_records_creator <- function(creator, api_key = Sys.getenv("ALGAEBASE_API_KEY"), offset = 0, count = 100000) {
   
   # Load necessary libraries for API requests and data manipulation
   library(httr)      # For HTTP requests
@@ -22,7 +22,7 @@ AlgaeBase_records_creator <- function(creator, api_key = Sys.getenv("ALGAEBASE_A
   library(dplyr)     # For data manipulation
   library(purrr)     # For functional programming (mapping functions)
   library(tibble)    # For creating tidy data frames
-  library(stringr)
+  library(curl)
   
   # Ensure that an API key is provided, otherwise throw an error
   if (api_key == "") {
@@ -71,7 +71,3 @@ AlgaeBase_records_creator <- function(creator, api_key = Sys.getenv("ALGAEBASE_A
   # Return the final tibble containing the fetched species records
   return(result_df)
 }
-
-# Example usage:
-# result_creator <- AlgaeBase_records_creator("M.D. Guiry", api_key = "your_api_key")
-# View(result_creator)
