@@ -127,7 +127,7 @@ AlgaeBase_records_creator(scientific_names, api_key, offset = 0, count = 100)
 #### Example
 
 ```r
-creator_data <- AlgaeBase_records_creator(c("Phaeocystis pouchetii"), api_key = "your_api_key")
+creator_data <- AlgaeBase_records_creator(c("Salvador"), api_key = "your_api_key")
 print(creator_data)
 ```
 
