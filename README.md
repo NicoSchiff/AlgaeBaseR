@@ -1,241 +1,264 @@
-# AlgaeBaseR - A Toolset for Querying AlgaeBase, Correcting Scientific Names, and Accessing External Datasets
+# AlgaeBaseR
 
-This repository contains a suite of functions designed to query AlgaeBase, clean and correct scientific names from multiple sources (Dyntaxa, Nordic Microalgae, and WoRMS), and work with datasets related to harmful algae blooms (HABs) and phytoplankton species. 
+## Overview
 
-The goal is to streamline data retrieval and scientific name correction for algae and phytoplankton research.
-
-## Features
-
-- **Retrieve genus and species records from AlgaeBase API** using functions such as `AlgaeBase_records_genus`, `AlgaeBase_records_species`, and more.
-- **Correct scientific names** using a combination of Dyntaxa, Nordic Microalgae, and WoRMS datasets via `correct_scientific_names`.
-- **Download taxonomic datasets** such as Dyntaxa, Nordic Microalgae, and Harmful Algal Blooms (HABs).
+The **AlgaeBaseR** package provides tools to interact with the AlgaeBase API, download datasets, and correct scientific names for phytoplankton and other organisms. This package includes functions to fetch records for species or genus, download taxonomic lists, and match scientific names.
 
 ## Installation
 
-Clone the repository to your local machine and install any required dependencies:
-
-```bash
-git clone https://github.com/NicoSchiff/AlgaeBaseR.git
-```
-
-Ensure that you have the required R packages installed:
+You can install the necessary packages and dependencies by running the `load_packages()` function:
 
 ```r
-install.packages(c("httr", "jsonlite", "dplyr", "stringdist", "purrr", "tibble", "tidyr"))
+# Load necessary libraries
+load_packages()
 ```
 
 ## Functions
 
-### 1. `AlgaeBase_name2id`
+### 1. `AlgaeBase_records_genus`
 
-**Description**: Retrieves `scientificNameID` and `acceptedNameUsageID` from AlgaeBase using their API.
+This function retrieves genus records from AlgaeBase by querying the genus name.
 
-**Usage**:
+#### Usage
 
 ```r
-AlgaeBase_name2id(scientific_names, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+AlgaeBase_records_genus(genus, api_key, offset = 0, count = 100)
 ```
 
-**Parameters**:
+#### Arguments
+- `genus`: The name of the genus to query.
+- `api_key`: Your AlgaeBase API key.
+- `offset`: Pagination offset (default is 0).
+- `count`: The number of records to fetch (default is 100).
+
+#### Example
+
+```r
+genus_data <- AlgaeBase_records_genus("Phaeocystis", api_key = "your_api_key")
+print(genus_data)
+```
+
+### 2. `AlgaeBase_records_species`
+
+This function retrieves species records from AlgaeBase, optionally with taxonomic information.
+
+#### Usage
+
+```r
+AlgaeBase_records_species(scientific_names, api_key, offset = 0, count = 10000, threshold = 1.5, add_taxo = TRUE, apply_filter = TRUE)
+```
+
+#### Arguments
 - `scientific_names`: A vector of scientific names to query.
-- `api_key`: Your AlgaeBase API key (defaults to the environment variable `ALGAEBASE_API_KEY`).
+- `api_key`: Your AlgaeBase API key.
+- `offset`: Pagination offset (default is 0).
+- `count`: The number of records to fetch (default is 10,000).
+- `threshold`: Levenshtein distance threshold for name matching.
+- `add_taxo`: Whether to add taxonomic information (default is TRUE).
+- `apply_filter`: Whether to filter based on name matching (default is TRUE).
 
-**Example**:
-
-```r
-result <- AlgaeBase_name2id(c("Phaeocystis pouchetii", "Alexandrium"))
-print(result)
-```
-
-### 2. `AlgaeBase_records_genus`
-
-**Description**: Retrieves genus records from AlgaeBase using the genus name.
-
-**Usage**:
+#### Example
 
 ```r
-AlgaeBase_records_genus(genus_name, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+species_data <- AlgaeBase_records_species(c("Phaeocystis pouchetii", "Alexandrium minutum"), api_key = "your_api_key")
+print(species_data)
 ```
 
-**Parameters**:
-- `genus_name`: The genus name to query.
+### 3. `AlgaeBase_records_IDs`
+
+This function retrieves records from AlgaeBase by using species or genus IDs.
+
+#### Usage
+
+```r
+AlgaeBase_records_IDs(ids, api_key, offset = 0, count = 100)
+```
+
+#### Arguments
+- `ids`: A vector of species or genus IDs to query.
+- `api_key`: Your AlgaeBase API key.
+- `offset`: Pagination offset (default is 0).
+- `count`: The number of records to fetch (default is 100).
+
+#### Example
+
+```r
+ids_data <- AlgaeBase_records_IDs(c(1234, 5678), api_key = "your_api_key")
+print(ids_data)
+```
+
+### 4. `AlgaeBase_name2id`
+
+This function retrieves the AlgaeBase ID corresponding to a scientific name.
+
+#### Usage
+
+```r
+AlgaeBase_name2id(scientific_names, api_key)
+```
+
+#### Arguments
+- `scientific_names`: A vector of scientific names to query.
 - `api_key`: Your AlgaeBase API key.
 
-**Example**:
+#### Example
 
 ```r
-genus_records <- AlgaeBase_records_genus("Chaetoceros")
-print(genus_records)
-```
-
-### 3. `AlgaeBase_records_species`
-
-**Description**: Retrieves species records from AlgaeBase based on a given species name.
-
-**Usage**:
-
-```r
-AlgaeBase_records_species(species_name, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
-```
-
-**Parameters**:
-- `species_name`: The species name to query.
-- `api_key`: Your AlgaeBase API key.
-
-**Example**:
-
-```r
-species_records <- AlgaeBase_records_species("Phaeocystis globosa")
-print(species_records)
-```
-
-### 4. `AlgaeBase_records_IDs`
-
-**Description**: Retrieves detailed records from AlgaeBase using specific `scientificNameID` or `acceptedNameUsageID`.
-
-**Usage**:
-
-```r
-AlgaeBase_records_IDs(ids, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
-```
-
-**Parameters**:
-- `ids`: A vector of AlgaeBase scientific name IDs or accepted name usage IDs.
-- `api_key`: Your AlgaeBase API key.
-
-**Example**:
-
-```r
-records <- AlgaeBase_records_IDs(c(12345, 67890))
-print(records)
+id_data <- AlgaeBase_name2id(c("Phaeocystis pouchetii"), api_key = "your_api_key")
+print(id_data)
 ```
 
 ### 5. `AlgaeBase_records_creator`
 
-**Description**: Queries AlgaeBase for records based on a creator or authority name.
+This function fetches the metadata of species records from the API, including the creator and bibliographic citation.
 
-**Usage**:
+#### Usage
 
 ```r
-AlgaeBase_records_creator(creator_name, api_key = Sys.getenv("ALGAEBASE_API_KEY"))
+AlgaeBase_records_creator(scientific_names, api_key, offset = 0, count = 100)
 ```
 
-**Parameters**:
-- `creator_name`: The creator or authority name to query.
+#### Arguments
+- `scientific_names`: A vector of scientific names to query.
 - `api_key`: Your AlgaeBase API key.
+- `offset`: Pagination offset (default is 0).
+- `count`: The number of records to fetch (default is 100).
 
-**Example**:
-
-```r
-creator_records <- AlgaeBase_records_creator("Salvador")
-print(creator_records)
-```
-
-### 6. `correct_scientific_names`
-
-**Description**: Corrects scientific names using the Dyntaxa, Nordic Microalgae, and WoRMS datasets. It compares names using a string distance threshold.
-
-**Usage**:
+#### Example
 
 ```r
-correct_scientific_names(names, threshold = 4.5)
+creator_data <- AlgaeBase_records_creator(c("Phaeocystis pouchetii"), api_key = "your_api_key")
+print(creator_data)
 ```
 
-**Parameters**:
+### 6. `download_nordic_microalgae`
+
+This function downloads the Nordic Microalgae checklist from a specified URL.
+
+#### Usage
+
+```r
+download_nordic_microalgae(url = "https://nordicmicroalgae.org/checklist/download")
+```
+
+#### Arguments
+- `url`: The URL to download the checklist from (default provided).
+
+#### Example
+
+```r
+nordic_checklist <- download_nordic_microalgae()
+print(nordic_checklist)
+```
+
+### 7. `download_habs_taxlist`
+
+This function downloads the HABs (Harmful Algal Blooms) taxonomic list from a specified URL.
+
+#### Usage
+
+```r
+download_habs_taxlist(url = "https://hablist.download/taxlist")
+```
+
+#### Arguments
+- `url`: The URL to download the HABs list (default provided).
+
+#### Example
+
+```r
+habs_list <- download_habs_taxlist()
+print(habs_list)
+```
+
+### 8. `download_dyntaxa_biota`
+
+This function downloads the Dyntaxa Biota taxonomic dataset from a specified URL.
+
+#### Usage
+
+```r
+download_dyntaxa_biota(url = "https://dyntaxa.se/biota/download")
+```
+
+#### Arguments
+- `url`: The URL to download the Dyntaxa Biota dataset (default provided).
+
+#### Example
+
+```r
+dyntaxa_data <- download_dyntaxa_biota()
+print(dyntaxa_data)
+```
+
+### 9. `correct_scientific_names_with_dyntaxa`
+
+This function corrects scientific names based on the Dyntaxa taxonomic dataset.
+
+#### Usage
+
+```r
+correct_scientific_names_with_dyntaxa(names, dyntaxa_data)
+```
+
+#### Arguments
 - `names`: A vector of scientific names to correct.
-- `threshold`: The string distance threshold for matching names (default is 4.5).
+- `dyntaxa_data`: The Dyntaxa dataset to use for corrections.
 
-**Example**:
+#### Example
 
 ```r
-names <- c("Thalassiothrix nitzschioides", "Apediniella spinifera", "Azadiium concinnum")
-corrected_names <- correct_scientific_names(names)
+corrected_names <- correct_scientific_names_with_dyntaxa(c("Phaeocystis pouchetii"), dyntaxa_data)
 print(corrected_names)
 ```
 
-### 7. `download_dyntaxa_biota`
+### 10. `correct_scientific_names_with_nordic`
 
-**Description**: Downloads the Dyntaxa dataset directly from GitHub and loads it into an R dataframe.
+This function corrects scientific names based on the Nordic Microalgae checklist.
 
-**Usage**:
+#### Usage
 
 ```r
-dyntaxa_biota_df <- download_dyntaxa_biota(write = FALSE)
+correct_scientific_names_with_nordic(names, nordic_checklist)
 ```
 
-**Parameters**:
-- `save_dir`: Directory where the file will be saved if `write = TRUE`.
-- `write`: Logical, indicating whether to save the dataset to disk (default is `FALSE`).
+#### Arguments
+- `names`: A vector of scientific names to correct.
+- `nordic_checklist`: The Nordic Microalgae checklist to use for corrections.
 
-**Example**:
+#### Example
 
 ```r
-dyntaxa_biota_df <- download_dyntaxa_biota()
-head(dyntaxa_biota_df)
+corrected_names_nordic <- correct_scientific_names_with_nordic(c("Phaeocystis pouchetii"), nordic_checklist)
+print(corrected_names_nordic)
 ```
 
-### 8. `download_nordic_microalgae`
+### 11. `correct_scientific_names`
 
-**Description**: Downloads the Nordic Microalgae checklist and loads it into an R dataframe.
+This function corrects scientific names using multiple datasets, including Dyntaxa and Nordic Microalgae.
 
-**Usage**:
+#### Usage
 
 ```r
-nordic_microalgae_df <- download_nordic_microalgae(write = FALSE)
+correct_scientific_names(names, dyntaxa_data, nordic_checklist)
 ```
 
-**Parameters**:
-- `save_dir`: Directory where the file will be saved if `write = TRUE`.
-- `write`: Logical, indicating whether to save the dataset to disk (default is `FALSE`).
+#### Arguments
+- `names`: A vector of scientific names to correct.
+- `dyntaxa_data`: The Dyntaxa dataset to use for corrections.
+- `nordic_checklist`: The Nordic Microalgae checklist to use for corrections.
 
-**Example**:
-
-```r
-nordic_microalgae_df <- download_nordic_microalgae()
-head(nordic_microalgae_df)
-```
-
-### 9. `download_habs_taxlist`
-
-**Description**: Downloads the Harmful Algal Blooms (HABs) taxonomic list and loads it into an R dataframe.
-
-**Usage**:
+#### Example
 
 ```r
-habs_taxlist_df <- download_habs_taxlist(write = FALSE)
-```
-
-**Parameters**:
-- `save_dir`: Directory where the file will be saved if `write = TRUE`.
-- `write`: Logical, indicating whether to save the dataset to disk (default is `FALSE`).
-
-**Example**:
-
-```r
-habs_taxlist_df <- download_habs_taxlist()
-head(habs_taxlist_df)
+corrected_names_all <- correct_scientific_names(c("Phaeocystis pouchetii"), dyntaxa_data, nordic_checklist)
+print(corrected_names_all)
 ```
 
 ---
 
-## Dependencies
+## License
 
-This project relies on the following R libraries:
-- `httr`
-- `jsonlite`
-- `dplyr`
-- `purrr`
-- `tibble`
-- `tidyr`
-- `stringdist`
-- `worrms` (for accessing WoRMS API)
+This project is licensed under the MIT License.
 
-You can install them using:
-
-```r
-install.packages(c("httr", "jsonlite", "dplyr", "purrr", "tibble", "tidyr", "stringdist", "worrms"))
-```
-
-## Usage
-
-To use the various functions, ensure you have the correct API keys (for AlgaeBase and WoRMS) set in your environment or pass them directly as arguments. Example workflows are provided in the function examples.
+---
