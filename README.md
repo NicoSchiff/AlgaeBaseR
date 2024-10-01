@@ -40,27 +40,39 @@ print(genus_data)
 
 ### 2. `AlgaeBase_records_species`
 
-This function retrieves species records from AlgaeBase, optionally with taxonomic information.
+This function queries species data from the AlgaeBase API and can optionally retrieve genus-level data. It also provides a filtering mechanism based on name similarity using a Levenshtein distance threshold.
 
-#### Usage
+### Usage
 
 ```r
-AlgaeBase_records_species(scientific_names, api_key, offset = 0, count = 10000, threshold = 1.5, add_taxo = TRUE, apply_filter = TRUE)
+AlgaeBase_records_species(scientific_names, api_key = Sys.getenv("ALGAEBASE_API_KEY"), offset = 0, count = 10000, threshold = 1.5, add_taxo = TRUE, apply_filter = TRUE)
 ```
 
-#### Arguments
-- `scientific_names`: A vector of scientific names to query.
-- `api_key`: Your AlgaeBase API key.
-- `offset`: Pagination offset (default is 0).
-- `count`: The number of records to fetch (default is 10,000).
-- `threshold`: Levenshtein distance threshold for name matching.
-- `add_taxo`: Whether to add taxonomic information (default is TRUE).
-- `apply_filter`: Whether to filter based on name matching (default is TRUE).
+### Arguments
 
-#### Example
+- `scientific_names`: A character vector of species scientific names to query.
+- `api_key`: A string representing the AlgaeBase API key. This can either be passed directly or retrieved from the environment variable 'ALGAEBASE_API_KEY'.
+- `offset`: An integer value for pagination (default is 0).
+- `count`: The number of records to fetch per request (default is 10,000).
+- `add_taxo`: A logical value indicating whether genus-level taxonomy should be included in the output (default is TRUE).
+- `threshold`: A numeric value indicating the Levenshtein distance threshold for matching species names. A higher threshold allows for more distant matches (default is 1.5).
+- `apply_filter`: A logical value indicating whether to apply the filtering based on name similarity using the threshold (default is TRUE).
+
+### Example
 
 ```r
-species_data <- AlgaeBase_records_species(c("Phaeocystis pouchetii", "Alexandrium minutum"), api_key = "your_api_key")
+# Define a vector of species scientific names
+species_names <- c("Phaeocystis pouchetii", "Microcystis pulverea", "Chaetoceros gelida")
+
+# Query AlgaeBase with genus-level taxonomy and apply filtering based on name similarity
+species_data <- AlgaeBase_records_species(
+  scientific_names = species_names,
+  api_key = "your_api_key",
+  add_taxo = TRUE,
+  apply_filter = TRUE
+)
+
+# View the retrieved data
 print(species_data)
 ```
 
