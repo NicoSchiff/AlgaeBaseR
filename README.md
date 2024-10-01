@@ -127,138 +127,218 @@ AlgaeBase_records_creator(scientific_names, api_key, offset = 0, count = 100)
 #### Example
 
 ```r
-creator_data <- AlgaeBase_records_creator(c("Salvador"), api_key = "your_api_key")
+creator_data <- AlgaeBase_records_creator("M.D. Guiry", api_key = "your_api_key")
 print(creator_data)
 ```
 
 ### 6. `download_nordic_microalgae`
 
-This function downloads the Nordic Microalgae checklist from a specified URL.
+This function downloads the Nordic Microalgae checklist from the Swedish Meteorological and Hydrological Institute (SMHI) and loads it into an R dataframe. Optionally, it can save the file to disk if `write = TRUE`.
 
-#### Usage
+### Usage
 
 ```r
-download_nordic_microalgae(url = "https://nordicmicroalgae.org/checklist/download")
+download_nordic_microalgae(save_dir = tempdir(), write = FALSE)
 ```
 
-#### Arguments
-- `url`: The URL to download the checklist from (default provided).
+### Arguments
 
-#### Example
+- `save_dir`: A character string indicating the directory where the file will be saved if `write = TRUE`. Defaults to a temporary directory (`tempdir()`).
+- `write`: A logical value indicating whether the file should be saved to disk. Defaults to `FALSE` (i.e., data is only loaded into memory).
+
+### Example
 
 ```r
-nordic_checklist <- download_nordic_microalgae()
-print(nordic_checklist)
+# Download the Nordic Microalgae checklist and load it into memory
+nordic_microalgae_df <- download_nordic_microalgae(write = FALSE)
+
+# Display the first few rows of the dataframe
+head(nordic_microalgae_df)
+
+# If you want to save the downloaded file to disk, set `write = TRUE`
+nordic_microalgae_df <- download_nordic_microalgae(save_dir = "path/to/save/directory", write = TRUE)
+
+# Check the content of the saved file
+print(nordic_microalgae_df)
 ```
 
 ### 7. `download_habs_taxlist`
+Here’s how you can incorporate the `download_habs_taxlist()` function into your README with an example:
 
-This function downloads the HABs (Harmful Algal Blooms) taxonomic list from a specified URL.
+---
 
-#### Usage
+## 6. `download_habs_taxlist`
+
+This function downloads the HABs (Harmful Algal Blooms) taxonomic list from a specified URL. You can configure which taxonomic and metadata fields to include in the downloaded list and specify whether or not to save the file to disk.
+
+### Usage
 
 ```r
-download_habs_taxlist(url = "https://hablist.download/taxlist")
+download_habs_taxlist(save_dir = tempdir(), write = FALSE, output_type = "txt", p = "download", what = "taxlist",
+                      id = TRUE, dn = TRUE, auth = TRUE, tu_fossil = TRUE, RankName = TRUE,
+                      status_name = TRUE, qualitystatus_name = TRUE, modified = TRUE,
+                      lsid = TRUE, tu_parent = TRUE, tu_sp = TRUE, citation = TRUE,
+                      Classification = TRUE, Environment = TRUE, Accepted_taxon = TRUE)
 ```
 
-#### Arguments
-- `url`: The URL to download the HABs list (default provided).
+### Arguments
 
-#### Example
+- `save_dir`: Directory where the file will be saved (default is a temporary directory).
+- `write`: Logical, whether to save the file to disk (default is `FALSE`).
+- `output_type`: The output file type (default is `txt`).
+- `p`: Parameter for downloading (default is `download`).
+- `what`: What type of list to download (default is `taxlist`).
+- `id`: Whether to include the ID column (default is `TRUE`).
+- `dn`: Whether to include the "Display Name" column (default is `TRUE`).
+- `auth`: Whether to include authorship information (default is `TRUE`).
+- `tu_fossil`: Whether to include fossil status (default is `TRUE`).
+- `RankName`: Whether to include taxonomic rank information (default is `TRUE`).
+- `status_name`: Whether to include status information (default is `TRUE`).
+- `qualitystatus_name`: Whether to include quality status information (default is `TRUE`).
+- `modified`: Whether to include modification date (default is `TRUE`).
+- `lsid`: Whether to include the LSID (Life Science Identifier) column (default is `TRUE`).
+- `tu_parent`: Whether to include the parent taxon ID (default is `TRUE`).
+- `tu_sp`: Whether to include species information (default is `TRUE`).
+- `citation`: Whether to include citation information (default is `TRUE`).
+- `Classification`: Whether to include taxonomic classification (default is `TRUE`).
+- `Environment`: Whether to include environment information (default is `TRUE`).
+- `Accepted_taxon`: Whether to include accepted taxon information (default is `TRUE`).
+
+### Example
 
 ```r
-habs_list <- download_habs_taxlist()
-print(habs_list)
+# Download the HABs taxonomic list but don't save it to disk
+habs_taxlist <- download_habs_taxlist(write = FALSE)
+
+# Display the first few rows of the dataframe
+head(habs_taxlist)
+
+# If you want to save the downloaded file to disk, set `write = TRUE`
+habs_taxlist <- download_habs_taxlist(save_dir = "path/to/save/directory", write = TRUE)
+
+# Check the content of the saved file
+print(habs_taxlist)
 ```
 
 ### 8. `download_dyntaxa_biota`
 
-This function downloads the Dyntaxa Biota taxonomic dataset from a specified URL.
+This function downloads the `dyntaxa_Biota.txt` file from the SHARK4R repository on GitHub and loads it into an R dataframe. Optionally, it can save the file to disk if `write = TRUE`.
 
-#### Usage
+### Usage
 
 ```r
-download_dyntaxa_biota(url = "https://dyntaxa.se/biota/download")
+download_dyntaxa_biota(save_dir = tempdir(), write = FALSE)
 ```
 
-#### Arguments
-- `url`: The URL to download the Dyntaxa Biota dataset (default provided).
+### Arguments
 
-#### Example
+- `save_dir`: A character string indicating the directory where the file will be saved if `write = TRUE`. Defaults to a temporary directory (`tempdir()`).
+- `write`: A logical value indicating whether the file should be saved to disk. Defaults to `FALSE` (i.e., data is only loaded into memory).
+
+### Example
 
 ```r
-dyntaxa_data <- download_dyntaxa_biota()
-print(dyntaxa_data)
+# Download the dyntaxa_Biota.txt file and load it into memory
+dyntaxa_biota_df <- download_dyntaxa_biota(write = FALSE)
+
+# Display the first few rows of the dataframe
+head(dyntaxa_biota_df)
+
+# If you want to save the downloaded file to disk, set `write = TRUE`
+dyntaxa_biota_df <- download_dyntaxa_biota(save_dir = "path/to/save/directory", write = TRUE)
+
+# Check the content of the saved file
+print(dyntaxa_biota_df)
 ```
 
-### 9. `correct_scientific_names_with_dyntaxa`
+Here’s how you can incorporate each of the above functions into your README with a brief description and example:
 
-This function corrects scientific names based on the Dyntaxa taxonomic dataset.
+---
 
-#### Usage
+## 9. `correct_scientific_names_with_dyntaxa`
+
+This function compares a list of scientific names to the `dyntaxa_Biota.txt` dataset and corrects the names if there are small discrepancies using a threshold for string distance.
+
+### Usage
 
 ```r
-correct_scientific_names_with_dyntaxa(names, dyntaxa_data)
+correct_scientific_names_with_dyntaxa(names, threshold = 1.5)
 ```
 
-#### Arguments
-- `names`: A vector of scientific names to correct.
-- `dyntaxa_data`: The Dyntaxa dataset to use for corrections.
+### Arguments
 
-#### Example
+- `names`: A character vector of scientific names to be corrected.
+- `threshold`: A numeric value indicating the threshold for string distance when matching names. A higher threshold allows for more distant matches. Default is 1.5.
+
+### Example
 
 ```r
-corrected_names <- correct_scientific_names_with_dyntaxa(c("Phaeocystis pouchetii"), dyntaxa_data)
+# Define a list of scientific names
+names <- c("Thalassiothrix nitzschioides", "Apediniella spinifera", "Azadiium concinnum")
+
+# Correct the names based on Dyntaxa
+corrected_names <- correct_scientific_names_with_dyntaxa(names, threshold = 4.5)
+
+# Display the corrected names
 print(corrected_names)
 ```
 
-### 10. `correct_scientific_names_with_nordic`
+---
 
-This function corrects scientific names based on the Nordic Microalgae checklist.
+## 10. `correct_scientific_names_with_nordic`
 
-#### Usage
+This function compares a list of scientific names to the `nordicmicroalgae_checklist_2024_apr_04.txt` dataset and corrects the names if there are small discrepancies using a threshold for string distance.
+
+### Usage
 
 ```r
-correct_scientific_names_with_nordic(names, nordic_checklist)
+correct_scientific_names_with_nordic(names, threshold = 1.5)
 ```
 
-#### Arguments
-- `names`: A vector of scientific names to correct.
-- `nordic_checklist`: The Nordic Microalgae checklist to use for corrections.
+### Arguments
 
-#### Example
+- `names`: A character vector of scientific names to be corrected.
+- `threshold`: A numeric value indicating the threshold for string distance when matching names. A higher threshold allows for more distant matches. Default is 1.5.
 
-```r
-corrected_names_nordic <- correct_scientific_names_with_nordic(c("Phaeocystis pouchetii"), nordic_checklist)
-print(corrected_names_nordic)
-```
-
-### 11. `correct_scientific_names`
-
-This function corrects scientific names using multiple datasets, including Dyntaxa and Nordic Microalgae.
-
-#### Usage
+### Example
 
 ```r
-correct_scientific_names(names, dyntaxa_data, nordic_checklist)
-```
+# Define a list of scientific names
+names <- c("Thalassiothrix nitzschioides", "Apediniella spinifera", "Azadiium concinnum")
 
-#### Arguments
-- `names`: A vector of scientific names to correct.
-- `dyntaxa_data`: The Dyntaxa dataset to use for corrections.
-- `nordic_checklist`: The Nordic Microalgae checklist to use for corrections.
+# Correct the names based on Nordic Microalgae
+corrected_names <- correct_scientific_names_with_nordic(names, threshold = 4.5)
 
-#### Example
-
-```r
-corrected_names_all <- correct_scientific_names(c("Phaeocystis pouchetii"), dyntaxa_data, nordic_checklist)
-print(corrected_names_all)
+# Display the corrected names
+print(corrected_names)
 ```
 
 ---
 
-## License
+## 11. `correct_scientific_names`
 
-This project is licensed under the MIT License.
+This function compares a list of scientific names to three different datasets: the Dyntaxa dataset (`dyntaxa_Biota.txt`), the Nordic Microalgae dataset (`nordicmicroalgae_checklist_2024_apr_04.txt`), and the World Register of Marine Species (WoRMS) API. It corrects the names if there are small discrepancies using a threshold for string distance.
 
----
+### Usage
+
+```r
+correct_scientific_names(names, threshold = 4.5)
+```
+
+### Arguments
+
+- `names`: A character vector of scientific names to be corrected.
+- `threshold`: A numeric value indicating the threshold for string distance when matching names. A higher threshold allows for more distant matches. Default is 4.5.
+
+### Example
+
+```r
+# Define a list of scientific names
+names <- c("Thalassiothrix nitzschioides", "Apediniella spinifera", "Azadiium concinnum")
+
+# Correct the names based on Dyntaxa, Nordic Microalgae, and WoRMS
+corrected_names <- correct_scientific_names(names, threshold = 4.5)
+
+# Display the corrected names
+print(corrected_names)
+```
